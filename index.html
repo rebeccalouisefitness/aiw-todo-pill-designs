@@ -1,6 +1,6 @@
 <!doctype html>
 <html lang="en"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1">
-<title>Today's Schedule — blue "to do" pill · 3 options</title>
+<title>Today's Schedule — "70 to do" as a notification · 3 options</title>
 <link href="https://fonts.googleapis.com/css2?family=Inter:wght@500;700;800&display=swap" rel="stylesheet">
 <style>
 *{box-sizing:border-box}body{margin:0;background:#FBF8F3;font-family:Inter,system-ui,sans-serif;color:#0D2842}
@@ -28,23 +28,35 @@ header p{margin:0;font-size:13px;color:#6b7280}
 .pB{background:#5A8FB0;color:#fff;padding:5px 11px 5px 8px;font-size:13px;box-shadow:0 1px 2px rgba(90,143,176,.35)}
 .pC{background:#E6EFF4;color:#3F7398;border:1px solid #C9DCE8;padding:3px 10px 3px 7px;font-size:11.5px}
 .pC b{font-weight:600;color:#5A8FB0}
+
+.card{position:relative;overflow:visible}.head{border-radius:18px}
+.nb{position:absolute;display:inline-flex;align-items:center;justify-content:center;font-weight:800;color:#fff;background:#5A8FB0;border-radius:999px;line-height:1;font-variant-numeric:tabular-nums}
+.nA{top:-9px;right:-9px;min-width:28px;height:28px;padding:0 8px;font-size:13px;border:3px solid #FBF8F3;box-shadow:0 2px 6px rgba(13,40,66,.18)}
+.nB{top:12px;right:14px;min-width:24px;height:22px;padding:0 7px;font-size:12px}
+.nB+.chev,.hasB .chev{margin-top:22px}
+.nC{top:10px;right:12px;display:flex;align-items:center;gap:0;background:none;padding:0}
+.nC .bell{width:30px;height:30px;border-radius:50%;background:#E6EFF4;display:flex;align-items:center;justify-content:center;position:relative}
+.nC .bell svg{width:16px;height:16px}
+.nC .ct{position:absolute;top:-6px;right:-10px;background:#5A8FB0;color:#fff;border:2px solid #fff;border-radius:999px;min-width:22px;height:18px;padding:0 5px;font-size:10.5px;display:flex;align-items:center;justify-content:center}
+.hasC .chev{margin-top:30px}
+.hasB .main,.hasC .main{padding-right:40px}
 </style></head><body>
-<header><h1>Today's Schedule — the "70 to do" as a blue pill</h1><p>Design only · tap any card to open/close it · everything else unchanged</p></header>
+<header><h1>Today's Schedule — "70 to do" as a notification</h1><p>Top-right corner · no alert icon · design only · tap a card to open/close</p></header>
 <div class="grid" id="g"></div>
 <script>
-const alertIco=c=>`<svg viewBox="0 0 24 24" fill="none" stroke="${c}" stroke-width="2.6" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="9.5"/><path d="M12 7.5v5.5"/><path d="M12 16.6v.01"/></svg>`;
+const bell=`<svg viewBox="0 0 24 24" fill="none" stroke="#5A8FB0" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round"><path d="M6 8a6 6 0 0 1 12 0c0 7 3 9 3 9H3s3-2 3-9"/><path d="M10.3 21a1.94 1.94 0 0 0 3.4 0"/></svg>`;
 const chev=`<svg class="chev" viewBox="0 0 24 24" fill="none" stroke="#C8956C" stroke-width="2.6" stroke-linecap="round" stroke-linejoin="round"><path d="M6 9l6 6 6-6"/></svg>`;
 const chips=`<div class="chips">
 <span class="chip" style="background:#F4EADC;color:#A9764E"><svg viewBox="0 0 24 24" fill="none" stroke="#A67C46" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round"><path d="M9 6h11M9 12h11M9 18h11M4 6l1 1 2-2M4 12l1 1 2-2M4 18l1 1 2-2"/></svg>9</span>
 <span class="chip" style="background:#E7EFE6;color:#5A7A5E"><svg viewBox="0 0 24 24" fill="none" stroke="#5A7A5E" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round"><path d="M21 12a8 8 0 0 1-11.6 7.1L4 20l1-4.6A8 8 0 1 1 21 12z"/></svg>2</span>
 <span class="chip" style="background:#F4EADC;color:#A9764E"><svg viewBox="0 0 24 24" fill="none" stroke="#C8956C" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round"><path d="M22 2L11 13M22 2l-7 20-4-9-9-4 20-7z"/></svg>59</span></div>`;
 const opts=[
- {lab:'Today (for reference)',sub:'Orange "70 to do" text',k:`TODAY'S SCHEDULE · <span class="old">70 TO DO</span>`},
- {lab:'Option A — soft pill next to the title',sub:'Pale blue fill, blue alert icon + 70',k:`TODAY'S SCHEDULE <span class="pill pA">${alertIco('#5A8FB0')}70</span>`},
- {lab:'Option B — solid blue pill by the arrow',sub:'Boldest: white alert icon + 70 on blue, right side',right:`<span class="pill pB">${alertIco('#fff')}70</span>`,k:`TODAY'S SCHEDULE`},
- {lab:'Option C — soft pill with words',sub:'Pale blue, fine outline: alert icon + "70 to do"',k:`TODAY'S SCHEDULE <span class="pill pC">${alertIco('#5A8FB0')}70 <b>to do</b></span>`},
+ {lab:'Today (for reference)',sub:'Orange "70 to do" text in the title',k:`TODAY'S SCHEDULE · <span class="old">70 TO DO</span>`},
+ {lab:'Option A — app-icon badge on the corner',sub:'Like an iPhone app badge: blue bubble sitting over the top-right corner',k:`TODAY'S SCHEDULE`,nb:`<span class="nb nA">70</span>`},
+ {lab:'Option B — small count bubble inside the corner',sub:'Quiet blue bubble tucked in the top-right, arrow below it',k:`TODAY'S SCHEDULE`,nb:`<span class="nb nB">70</span>`,cls:'hasB'},
+ {lab:'Option C — bell with a count',sub:'Soft bell in the top-right with a little "70" badge',k:`TODAY'S SCHEDULE`,nb:`<span class="nb nC"><span class="bell">${bell}<span class="ct">70</span></span></span>`,cls:'hasC'},
 ];
 document.getElementById('g').innerHTML=opts.map(o=>`<div class="col"><div class="lab">${o.lab}<small>${o.sub}</small></div>
-<div class="card"><div class="head" onclick="this.parentNode.classList.toggle('open')"><div class="main"><div class="kick">${o.k}</div>${chips}</div>${o.right||''}${chev}</div>
+<div class="card ${o.cls||''}">${o.nb||''}<div class="head" onclick="this.parentNode.classList.toggle('open')"><div class="main"><div class="kick">${o.k}</div>${chips}</div>${chev}</div>
 <div class="body">…schedule rows open here exactly as now (Customer follow up, Messages, Lead follow-ups, Calls)…</div></div></div>`).join('');
 </script></body></html>
